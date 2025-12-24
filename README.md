@@ -69,28 +69,7 @@ This repository provides a three-stage pipeline for trajectory refinement and te
 
 ---
 
-## 1️⃣ Temporal Clustering & Vision–Language Aggregation
-
-This step groups frame-level detections into trajectories and predicts a unified transcription using a vision–language model.
-
-### Description
-- Loads per-frame detection results (JSON format)
-- Groups detections by trajectory ID
-- Crops text regions and arranges them into a grid
-- Uses a VLM (e.g., Ovis-2.5) to infer the most frequent word
-- Saves:
-  - Updated JSON annotations
-  - Visualization grids
-  - Prediction logs
-
-```bash
-python full_word_vlm.py \
-  --json_dir path/to/vts_outputs \
-  --frames_dir path/to/video_frames \
-  --out_dir path/to/output_dir
-```
-
-## 2️⃣ Trajectory Refinement via Appearance Clustering
+## 1️⃣ Temporal Clustering
 
 This stage refines noisy tracking results by splitting inconsistent trajectories using visual appearance cues.
 
@@ -101,12 +80,28 @@ This stage refines noisy tracking results by splitting inconsistent trajectories
 - Outputs cleaned, re-identified trajectories
 
 ```bash
-python clean_tracks.py \
+python cluster_json.py \
   --json_dir path/to/raw_jsons \
   --frames_dir path/to/video_frames \
-  --output_json_dir path/to/cleaned_jsons
+  --output_json_dir path/to/clustered_jsons
 ```
 
+## 2️⃣ Vision–Language Aggregation
+
+This step groups frame-level detections into trajectories and predicts a unified transcription using a vision–language model.
+
+### Description
+- Loads per-frame detection results (JSON format)
+- Groups detections by trajectory ID
+- Crops text regions and arranges them into a grid
+- Uses a VLM (e.g., Ovis-2.5) to infer the recognition for each trajectory
+
+```bash
+python full_word_vlm.py \
+  --json_dir path/to/vts_outputs \
+  --frames_dir path/to/video_frames \
+  --out_dir path/to/output_dir
+```
 ## 3️⃣ Dataset Construction from XML Annotations
 
 This stage converts word-level XML annotations into grid-based training samples for vision–language models.
