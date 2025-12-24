@@ -122,7 +122,7 @@ python build_dataset_from_xml.py \
   --frames_root path/to/frames \
   --xml_root path/to/xml_annotations \
   --output_root path/to/output_dataset \
-  --batch_size number of crops
+  --batch_size number_of_crops
 ```
 
 ## 🧠 Notes
