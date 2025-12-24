@@ -1,6 +1,3 @@
-# clean_tracks_and_output_json.py
-# FINAL — Perfect online clustering → outputs cleaned JSON with correct IDs
-
 import os
 import json
 import numpy as np
